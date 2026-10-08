@@ -18,6 +18,7 @@
     "assets": {
         "point_of_sale._assets_pos": [
             "technical_test/static/src/js/product_screen.js",
+            "technical_test/static/src/js/payment_screen.js",
         ],
     },
     "installable": True,
