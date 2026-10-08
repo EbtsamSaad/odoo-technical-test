@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_product_template_rop_tree" model="ir.ui.view">
+        <field name="name">product.template.rop.tree</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <tree string="ROP Products">
+                <field name="name"/>
+                <field name="default_code"/>
+                <field name="list_price"/>
+                <field name="standard_price"/>
+                <field name="qty_available"/>
+                <field name="has_rop"/>
+                <field name="rop_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_template_rop_kanban" model="ir.ui.view">
+        <field name="name">product.template.rop.kanban</field>
+        <field name="model">product.template</field>
+
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="qty_available"/>
+                <field name="rop_count"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+
+                            <div>
+                                Quantity On Hand:
+                                <field name="qty_available"/>
+                            </div>
+
+                            <div>
+                                ROP Count:
+                                <field name="rop_count"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!--    ROP Products -->
+    <record id="action_rop_products" model="ir.actions.act_window">
+        <field name="name">ROP Products</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+
+        <field name="domain">
+            [('rop_status', '=', 'below')]
+        </field>
+    </record>
+
+    <record id="action_rop_products_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_product_template_rop_tree"/>
+        <field name="act_window_id" ref="action_rop_products"/>
+    </record>
+
+    <record id="action_rop_products_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_product_template_rop_kanban"/>
+        <field name="act_window_id" ref="action_rop_products"/>
+    </record>
+
+    <!--    Products > ROP -->
+    <record id="action_products_above_rop" model="ir.actions.act_window">
+        <field name="name">Products &gt; ROP</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">tree,kanban,form</field>
+
+        <field name="domain">
+            [('rop_status', '=', 'above')]
+        </field>
+    </record>
+
+    <record id="action_products_above_rop_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_product_template_rop_tree"/>
+        <field name="act_window_id" ref="action_products_above_rop"/>
+    </record>
+
+    <record id="action_products_above_rop_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_product_template_rop_kanban"/>
+        <field name="act_window_id" ref="action_products_above_rop"/>
+    </record>
+
+    <menuitem
+        id="menu_rop_root"
+        name="ROP"
+        parent="stock.menu_stock_inventory_control"
+        sequence="30"
+    />
+
+    <menuitem
+        id="menu_rop_products"
+        name="ROP Products"
+        parent="menu_rop_root"
+        action="action_rop_products"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_products_above_rop"
+        name="Products > ROP"
+        parent="menu_rop_root"
+        action="action_products_above_rop"
+        sequence="20"
+    />
+</odoo>

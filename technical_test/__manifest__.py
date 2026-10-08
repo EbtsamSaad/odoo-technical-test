@@ -11,6 +11,7 @@
     ],
     "data": [
         "views/product_template_views.xml",
+        "views/rop_product_views.xml",
     ],
     "installable": True,
     "application": False,
