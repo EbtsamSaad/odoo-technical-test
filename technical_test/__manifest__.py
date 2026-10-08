@@ -9,6 +9,7 @@
         "product",
         "stock",
         "point_of_sale",
+        "mail",
     ],
     "data": [
         "views/product_template_views.xml",

@@ -6,7 +6,6 @@ import { ErrorPopup } from "@point_of_sale/app/errors/popups/error_popup";
 
 patch(Order.prototype, {
     async pay() {
-        debugger;
         const productIds = [
             ...new Set(
                 this.get_orderlines()
@@ -24,6 +23,7 @@ patch(Order.prototype, {
             [
                 productIds,
                 this.env.services.pos.config.id,
+                this.uid,
             ]
         );
 
