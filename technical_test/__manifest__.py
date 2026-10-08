@@ -8,11 +8,17 @@
     "depends": [
         "product",
         "stock",
+        "point_of_sale",
     ],
     "data": [
         "views/product_template_views.xml",
         "views/rop_product_views.xml",
     ],
+    "assets": {
+        "point_of_sale._assets_pos": [
+            "technical_test/static/src/js/product_screen.js",
+        ],
+    },
     "installable": True,
     "application": False,
 }
