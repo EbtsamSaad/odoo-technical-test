@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="technical_test.ActionpadWidget"
+       t-inherit="point_of_sale.ActionpadWidget"
+       t-inherit-mode="extension">
+
+        <xpath expr="//button[contains(@class, 'pay-order-button')]"
+               position="before">
+
+            <button class="button cash-now-button btn-primary"
+                    t-attf-class="{{getMainButtonClasses()}}"
+                    t-on-click="() => this.onCashNow()">
+
+                <div class="pay-circle d-flex align-items-center justify-content-center py-2 mb-2">
+                    <i class="fa fa-money"
+                       role="img"
+                       aria-label="Cash Now"
+                       title="Cash Now"/>
+                </div>
+
+                <span class="text-white">
+                    Cash Now
+                </span>
+            </button>
+
+        </xpath>
+
+    </t>
+
+</templates>

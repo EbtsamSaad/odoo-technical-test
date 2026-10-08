@@ -3,8 +3,22 @@
 import { patch } from "@web/core/utils/patch";
 import { PaymentScreen } from "@point_of_sale/app/screens/payment_screen/payment_screen";
 import { ErrorPopup } from "@point_of_sale/app/errors/popups/error_popup";
+import { onMounted } from "@odoo/owl";
 
 patch(PaymentScreen.prototype, {
+    setup() {
+        super.setup(...arguments);
+
+        onMounted(async () => {
+            const order = this.currentOrder;
+
+            if (order?.cash_now) {
+                order.cash_now = false;
+
+                await this.validateOrder(false);
+            }
+        });
+    },
     async validateOrder(isForceValidate) {
         const order = this.currentOrder;
         const partner = order.get_partner();

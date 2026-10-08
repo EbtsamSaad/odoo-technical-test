@@ -19,6 +19,8 @@
         "point_of_sale._assets_pos": [
             "technical_test/static/src/js/product_screen.js",
             "technical_test/static/src/js/payment_screen.js",
+            "technical_test/static/src/js/actionpad_widget.js",
+            "technical_test/static/src/xml/actionpad_widget.xml",
         ],
     },
     "installable": True,
