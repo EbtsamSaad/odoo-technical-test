@@ -17,6 +17,7 @@
         "views/rop_product_views.xml",
         "views/pos_config_views.xml",
         "views/website_rop_templates.xml",
+        "views/website_rop_realtime.xml",
     ],
     "assets": {
         "point_of_sale._assets_pos": [
@@ -28,6 +29,7 @@
         ],
         "web.assets_frontend": [
                 "technical_test/static/src/js/website_rop.js",
+                "technical_test/static/src/js/website_rop_realtime.js",
                 "technical_test/static/src/css/website_rop.css",
             ],
     },

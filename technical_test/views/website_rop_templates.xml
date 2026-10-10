@@ -17,6 +17,10 @@
                        class="nav-link">
                         ROP
                     </a>
+                    <a href="/shop/rop/realtime"
+                       class="btn btn-outline-primary">
+                        Real-time ROP
+                    </a>
                 </li>
             </t>
         </xpath>

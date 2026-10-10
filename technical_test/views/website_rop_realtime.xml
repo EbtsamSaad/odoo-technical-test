@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_rop_realtime" name="Real-time ROP">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure o_website_rop_realtime">
+                <section class="container py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2>Real-time ROP</h2>
+                            <p class="text-muted">
+                                Products with quantity on hand greater than 5.
+                            </p>
+                        </div>
+
+                        <span class="badge bg-success">
+                            Auto-updating
+                        </span>
+                    </div>
+
+                    <div id="ropRealtimeProducts"
+                         class="row g-4">
+                        <div class="col-12 text-center text-muted">
+                            Loading products...
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>
