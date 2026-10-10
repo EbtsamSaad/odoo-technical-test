@@ -5,7 +5,6 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     @api.model
-    @api.model
     def get_products_below_rop(self, product_ids, pos_config_id, order_uid):
         products = self.browse(product_ids).exists()
         pos_config = self.env["pos.config"].browse(pos_config_id).exists()

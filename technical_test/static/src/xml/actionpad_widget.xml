@@ -23,6 +23,11 @@
                     Cash Now
                 </span>
             </button>
+<!--            <button-->
+<!--                class="btn btn-success btn-sm w-100 mt-1 quick-cash-btn"-->
+<!--                t-on-click.stop="() => this.onQuickCash(props.product)">-->
+<!--                <i class="fa fa-bolt me-1"/> Cash Now2-->
+<!--            </button>-->
 
         </xpath>
 

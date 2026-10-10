@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_view_form_inherit_cash_now" model="ir.ui.view">
+        <field name="name">pos.config.form.cash.now</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//setting[@id='other_devices']" position="after">
+                <setting id="auto_invoice_cash_now_setting"
+                         string="Auto Invoice on Cash Now"
+                         help="Automatically create an accounting invoice when using Cash Now.">
+                    <field name="auto_invoice_cash_now"/>
+                </setting>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
