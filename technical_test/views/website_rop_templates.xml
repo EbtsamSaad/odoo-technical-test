@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template
+        id="website_rop_header_menu"
+        inherit_id="website.template_header_default"
+        name="ROP Header Menu"
+        priority="30">
+
+        <xpath expr="//t[@t-foreach='website.menu_id.child_id']"
+               position="after">
+            <t t-if="request.env.user.has_group('base.group_system')
+                     or request.env.user.has_group('stock.group_stock_manager')
+                     or request.env.user.has_group('stock.group_stock_user')">
+                <li class="nav-item">
+                    <a href="/shop/rop"
+                       class="nav-link">
+                        ROP
+                    </a>
+                </li>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="website_rop_products" name="ROP Products">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="container py-5">
+
+                    <h2>ROP Products</h2>
+                    <p class="text-muted">
+                        Products with quantity on hand below 5 units.
+                    </p>
+
+                    <div class="row g-4 mt-3">
+                        <t t-foreach="products" t-as="product">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                <div class="card h-100 shadow-sm">
+                                    <img t-att-src="'/web/image/product.template/%s/image_256' % product.id"
+                                         class="card-img-top"
+                                         style="height: 200px; object-fit: contain;"
+                                         alt="Product"/>
+                                    <div class="card-body">
+                                        <h5 t-esc="product.name"/>
+                                        <p class="text-danger">
+                                            Quantity:
+                                            <strong t-esc="product.qty_available"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not products">
+                            <div class="alert alert-info">
+                                No products currently have quantity below 5
+                            </div>
+                        </t>
+
+                    </div>
+
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -10,11 +10,13 @@
         "stock",
         "point_of_sale",
         "mail",
+        "website_sale",
     ],
     "data": [
         "views/product_template_views.xml",
         "views/rop_product_views.xml",
         "views/pos_config_views.xml",
+        "views/website_rop_templates.xml",
     ],
     "assets": {
         "point_of_sale._assets_pos": [
