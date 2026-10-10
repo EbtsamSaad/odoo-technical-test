@@ -26,6 +26,10 @@
             "technical_test/static/src/js/actionpad_widget.js",
             "technical_test/static/src/xml/actionpad_widget.xml",
         ],
+        "web.assets_frontend": [
+                "technical_test/static/src/js/website_rop.js",
+                "technical_test/static/src/css/website_rop.css",
+            ],
     },
     "installable": True,
     "application": False,
