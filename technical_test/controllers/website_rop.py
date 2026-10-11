@@ -138,34 +138,5 @@ class WebsiteROPController(http.Controller):
             "image_url": f"/web/image/product.product/{product.id}/image_256",
         } for product in products]
 
-    # API endpoint for ROP products (Task4)
-    @http.route(
-        "/rop-product",
-        type="http",
-        auth="user",
-        methods=["GET"],
-        csrf=False,
-    )
-    def get_rop_products(self, **kwargs):
-        self._check_rop_access()
-        products = request.env["product.product"].search([
-            ("detailed_type", "=", "product"),
-            ("qty_available", "<", 5),
-        ])
 
-        data = [
-            {
-                "id": product.id,
-                "name": product.display_name,
-                "default_code": product.default_code,
-                "quantity_on_hand": product.qty_available,
-            }
-            for product in products
-        ]
-        payload = {
-            "success": True,
-            "count": len(data),
-            "products": data,
-        }
-        return request.make_json_response(payload)
 

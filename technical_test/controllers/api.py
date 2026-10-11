@@ -6,6 +6,24 @@ from odoo.http import request
 
 
 class TechnicalTestAPI(http.Controller):
+
+    def _authenticate_api_key(self):
+        """Authenticates request using an API Key passed in headers or params."""
+        api_key = request.httprequest.headers.get("x-api-key") or request.params.get("api_key")
+        if not api_key:
+            return None
+        try:
+            user_id = request.env["res.users.apikeys"].sudo()._check_credentials(
+                scope="rpc", key=api_key
+            )
+            if user_id:
+                # Return authenticated user environment (Sudo or user env)
+                return request.env["res.users"].sudo().browse(user_id)
+        except Exception:
+            pass
+
+        return None
+
     # Api - task1
     def _get_user_tz(self):
         """Retrieve the user timezone or fall back to UTC."""
@@ -20,11 +38,21 @@ class TechnicalTestAPI(http.Controller):
     @http.route(
         "/api/orders",
         type="http",
-        auth="user",
+        auth="public",
         methods=["GET"],
         csrf=False,
     )
     def get_pos_orders(self, start_date=None, end_date=None, **kwargs):
+        user = self._authenticate_api_key()
+        if not user:
+            return request.make_json_response(
+                {
+                    "success": False,
+                    "message": "Unauthorized: Invalid or missing API key.",
+                },
+                status=401,
+            )
+
         if not start_date or not end_date:
             return request.make_json_response(
                 {
@@ -65,7 +93,7 @@ class TechnicalTestAPI(http.Controller):
             ("date_order", ">=", start_utc_str),
             ("date_order", "<", end_utc_str),
         ]
-        PosOrder = request.env["pos.order"]
+        PosOrder = request.env["pos.order"].with_user(user)
         orders = PosOrder.search_read(
             domain=domain,
             fields=[
@@ -93,11 +121,22 @@ class TechnicalTestAPI(http.Controller):
     @http.route(
         "/api/products/rop",
         type="http",
-        auth="user",
+        auth="public",
         methods=["GET"],
         csrf=False,
     )
     def get_products_rop(self, limit=80, page=1, **kwargs):
+        user = self._authenticate_api_key()
+
+        if not user:
+            return request.make_json_response(
+                {
+                    "success": False,
+                    "message": "Unauthorized: Invalid or missing API key.",
+                },
+                status=401,
+            )
+
         domain = [("rop_count", ">", 0)]
         # Calculate pagination parameters
         try:
@@ -107,7 +146,7 @@ class TechnicalTestAPI(http.Controller):
         except ValueError:
             limit, offset, page = 80, 0, 1
 
-        ProductTemplate = request.env["product.template"]
+        ProductTemplate = request.env["product.template"].with_user(user)
         total_count = ProductTemplate.search_count(domain)
 
         products = ProductTemplate.search_read(
@@ -135,25 +174,8 @@ class TechnicalTestAPI(http.Controller):
         return request.make_json_response(payload)
 
     #Api -task3
-    def _authenticate_api_key(self):
-        """Authenticates request using an API Key passed in headers or params."""
-        api_key = request.httprequest.headers.get("x-api-key") or request.params.get("api_key")
-        if not api_key:
-            return None
-        try:
-            user_id = request.env["res.users.apikeys"]._check_credentials(
-                scope="rpc", key=api_key
-            )
-            if user_id:
-                # Return authenticated user environment (Sudo or user env)
-                return request.env["res.users"].browse(user_id)
-        except Exception:
-            pass
-
-        return None
-
     @http.route(
-        "/api/products/rop",
+        "/api/products/rop/update",
         type="http",
         auth="public",
         methods=["POST"],
@@ -250,13 +272,24 @@ class TechnicalTestAPI(http.Controller):
     @http.route(
         "/api/pos/sessions/<int:session_id>/orders",
         type="http",
-        auth="user",
+        auth="public",
         methods=["GET"],
     )
     def get_session_orders(self, session_id, limit=80, page=1, **kwargs):
+        user = self._authenticate_api_key()
+
+        if not user:
+            return request.make_json_response(
+                {
+                    "success": False,
+                    "message": "Unauthorized: Invalid or missing API key.",
+                },
+                status=401,
+            )
         limit = int(limit)
         page = int(page)
-        PosSession = request.env["pos.session"]
+        PosSession = request.env["pos.session"].with_user(user)
+        print('session_id', session_id, PosSession)
         session = PosSession.browse(session_id).exists()
         if not session:
             return request.make_json_response(
@@ -271,7 +304,7 @@ class TechnicalTestAPI(http.Controller):
 
         offset = (page - 1) * limit
         domain = [("session_id", "=", session.id)]
-        PosOrder = request.env["pos.order"]
+        PosOrder = request.env["pos.order"].with_user(user)
         total_count = PosOrder.search_count(domain)
 
         orders = PosOrder.search_read(
@@ -305,4 +338,44 @@ class TechnicalTestAPI(http.Controller):
             "orders": orders,
         }
 
+        return request.make_json_response(payload)
+
+    # Ecommerce - Task 4, API endpoint for ROP products
+    @http.route(
+        "/rop-product",
+        type="http",
+        auth="public",
+        methods=["GET"],
+        csrf=False,
+    )
+    def get_rop_products(self, **kwargs):
+        user = self._authenticate_api_key()
+        if not user:
+            return request.make_json_response(
+                {
+                    "success": False,
+                    "message": "Unauthorized: Invalid or missing API key.",
+                },
+                status=401,
+            )
+
+        products = request.env["product.product"].with_user(user).search([
+            ("detailed_type", "=", "product"),
+            ("qty_available", "<", 5),
+        ])
+
+        data = [
+            {
+                "id": product.id,
+                "name": product.display_name,
+                "default_code": product.default_code,
+                "quantity_on_hand": product.qty_available,
+            }
+            for product in products
+        ]
+        payload = {
+            "success": True,
+            "count": len(data),
+            "products": data,
+        }
         return request.make_json_response(payload)
