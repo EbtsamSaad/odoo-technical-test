@@ -48,6 +48,7 @@ class WebsiteROPController(http.Controller):
     )
     def update_rop_quantity(self, product_id, quantity, **kwargs):
         self._check_rop_access()
+        user = request.env.user
 
         product = request.env["product.product"].browse(int(product_id)).exists()
         if not product:

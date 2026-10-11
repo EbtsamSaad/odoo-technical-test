@@ -119,7 +119,6 @@ patch(ActionpadWidget.prototype, {
         );
 
         order.set_to_invoice(autoInvoice);
-        // order.set_to_invoice(true);
 
         order.date_order = luxon.DateTime.now();
         order.finalized = true;

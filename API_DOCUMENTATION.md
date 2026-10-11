@@ -50,6 +50,11 @@ curl -X POST 'https://<odoo-host>/api/products/rop/update' \
 curl 'https://<odoo-host>/api/pos/sessions/4/orders?page=1&limit=20' \
   -H 'x-api-key: YOUR_API_KEY'
 ```
+**/rop-product**
+```bash
+curl 'https://<odoo-host>/api/rop-product' \
+  -H 'x-api-key: YOUR_API_KEY'
+```
 
 ## Response format
 
